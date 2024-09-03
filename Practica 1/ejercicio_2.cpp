@@ -18,6 +18,8 @@ void calcular_billetes_monedas(double cantidad) {
     for (int i = 0; i < 6; ++i) { //monedas
         cantidad_monedas[i] = cantidad / monedas[i];
         cantidad -= cantidad_monedas[i] * monedas[i];
+         // Para evitar problemas de precisión con los números flotantes
+        cantidad = (int)(cantidad * 100 + 0.5) / 100.0;
     }
 
     cout << "Billetes:" << endl;
@@ -33,6 +35,7 @@ void calcular_billetes_monedas(double cantidad) {
             cout << "S/" << monedas[i] << ": " << cantidad_monedas[i] << endl;
         }
     }
+
     cout<<"Resto: "<<cantidad<<endl;
 }
 
@@ -49,3 +52,4 @@ int main() {
 
     return 0;
 }
+ 
