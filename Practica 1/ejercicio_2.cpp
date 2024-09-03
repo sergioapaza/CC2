@@ -29,10 +29,11 @@ void calcular_billetes_monedas(double cantidad) {
 
     cout << "Monedas:" << endl;
     for (int i = 0; i < 6; ++i) { // mostar monedas
-        if (cantidad_monedas[i] > 0) {
+        if(cantidad_monedas[i] > 0) {
             cout << "S/" << monedas[i] << ": " << cantidad_monedas[i] << endl;
         }
     }
+    cout<<"Resto: "<<cantidad<<endl;
 }
 
 int main() {
