@@ -11,12 +11,12 @@ string numero_letras(int numero) {
 
     string result = "";
 
-    if (numero >= 1000) { // mil
-        if (numero / 1000 > 1) {
-            result += unidades[numero / 1000] + " mil ";
-        }
-        else {
+    if (numero >= 1000) { // miles
+        int miles = numero / 1000;
+        if (miles == 1) {
             result += "mil ";
+        } else {
+            result += numero_letras(miles) + " mil ";
         }
         numero %= 1000;
     }
@@ -24,8 +24,9 @@ string numero_letras(int numero) {
     if (numero >= 100) { // centena
         if (numero == 100) {
             result += "cien ";
+            return result; // Termina aquí si el número es exactamente 100
         }
-        else if (numero < 200) { //Caso 101 a 199
+        else if (numero < 200) { // Caso 101 a 199
             result += "ciento ";
             numero %= 100;
         }
@@ -55,10 +56,10 @@ string numero_letras(int numero) {
 
 int main() {
     int a;
-    cout << "Ingrese un numero entre 0 y 9999: ";
+    cout << "Ingrese un numero entre 0 y 999999: ";
     cin >> a;
 
-    if (a < 0 || a > 9999) {
+    if (a < 0 || a > 999999) {
         cout << "Numero fuera de rango." << endl;
     }
     else {
