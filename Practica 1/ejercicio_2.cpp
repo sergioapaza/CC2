@@ -1,55 +1,81 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
-void calcular_billetes_monedas(double cantidad) {
+string convertirMenorQueMil(int n) {
+    string unidades[] = {"", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"};
+    string decenas[] = {"", "diez", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa"};
+    string especiales[] = {"diez", "once", "doce", "trece", "catorce", "quince", "dieciseis", "diecisiete", "dieciocho", "diecinueve"};
+    string centenas[] = {"", "ciento", "doscientos", "trescientos", "cuatrocientos", "quinientos", "seiscientos", "setecientos", "ochocientos", "novecientos"};
 
-    int billetes[5] = {200, 100, 50, 20, 10};
-    double monedas[6] = {5.0, 2.0, 1.0, 0.5, 0.2, 0.1};
-
-    int cantidad_billetes[5] = {0}; // contador billetes
-    int cantidad_monedas[6] = {0}; // contador monedas
-
-    for (int i = 0; i < 5; ++i) { // billetes
-        cantidad_billetes[i] = cantidad / billetes[i];
-        cantidad -= cantidad_billetes[i] * billetes[i];
+    if (n == 0) {
+        return "cero";
+    } else if (n == 100) {
+        return "cien";
     }
 
-    for (int i = 0; i < 6; ++i) { //monedas
-        cantidad_monedas[i] = cantidad / monedas[i];
-        cantidad -= cantidad_monedas[i] * monedas[i];
-         // Para evitar problemas de precisión con los números flotantes
-        cantidad = (int)(cantidad * 100 + 0.5) / 100.0;
+    int c = n / 100;
+    int d = (n % 100) / 10;
+    int u = n % 10;
+
+    string resultado = "";
+    if (c > 0) {
+        resultado += centenas[c] + " ";
     }
 
-    cout << "Billetes:" << endl;
-    for (int i = 0; i < 5; ++i) { // mostar billetes
-        if (cantidad_billetes[i] > 0) {
-            cout << "S/" << billetes[i] << ": " << cantidad_billetes[i] << endl;
+    if (d == 1) {
+        resultado += especiales[u];
+    } else {
+        if (d > 0) {
+            if (d == 2 && u > 0) {  // Manejo de casos como "veintiuno"
+                resultado += "veinti" + unidades[u];
+            } else {
+                resultado += decenas[d] + (u > 0 ? " y " : "");
+            }
+        }
+        if (d != 2 && u > 0) {  // No agregar unidad en "veintiuno", "veintidós", etc.
+            resultado += unidades[u];
         }
     }
 
-    cout << "Monedas:" << endl;
-    for (int i = 0; i < 6; ++i) { // mostar monedas
-        if(cantidad_monedas[i] > 0) {
-            cout << "S/" << monedas[i] << ": " << cantidad_monedas[i] << endl;
+    return resultado;
+}
+
+string convertirAPalabras(int numero) {
+    if (numero < 0 || numero > 999999) {
+        return "Numero fuera de rango";
+    }
+
+    int miles = numero / 1000;
+    int resto = numero % 1000;
+
+    string resultado = "";
+    if (miles > 0) {
+        if (miles == 1) {
+            resultado += "mil ";
+        } else if (miles == 21) {
+            resultado += "veintiun mil ";
+        } else if (miles % 10 == 1 && miles != 11) {  // Para manejar casos como "51 mil", "101 mil", etc.
+            resultado += convertirMenorQueMil(miles).substr(0, convertirMenorQueMil(miles).size() - 3) + "un mil ";
+        } else {
+            resultado += convertirMenorQueMil(miles) + " mil ";
         }
     }
 
-    cout<<"Resto: "<<cantidad<<endl;
+    if (resto > 0) {
+        resultado += convertirMenorQueMil(resto);
+    }
+
+    return resultado;
 }
 
 int main() {
-    double cantidad;
-    cout << "Ingrese una cantidad: ";
-    cin >> cantidad;
+    int numero;
+    cout << "Ingresa un numero entre 0 y 999999: ";
+    cin >> numero;
 
-    if (cantidad < 0) {
-        cout << "La cantidad no puede ser negativa." << endl;
-    } else {
-        calcular_billetes_monedas(cantidad);
-    }
+    cout << convertirAPalabras(numero) << endl;
 
     return 0;
 }
- 
