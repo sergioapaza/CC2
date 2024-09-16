@@ -57,20 +57,24 @@ string convertirAPalabras(int numero) {
     if (miles > 0) {
         string milesTexto = convertirMenorQueMil(miles);
 
+        // Manejo del caso de "uno" antes de "mil"
         if (miles == 1) {
             resultado += "mil ";
-        }
-        else if (miles % 100 == 1) {  // Caso especial para cualquier número que termine en "101" o "111"
-            milesTexto = milesTexto.substr(0, milesTexto.size() - 3) + "un";  // Reemplaza "uno" por "un"
-            resultado += milesTexto + " mil ";
-        }
-        else {
+        } else {
+            if (milesTexto.substr(milesTexto.size() - 3) == "uno") {
+                milesTexto = milesTexto.substr(0, milesTexto.size() - 3) + "un";  // Reemplaza "uno" por "un"
+            }
             resultado += milesTexto + " mil ";
         }
     }
 
     if (resto > 0) {
         resultado += convertirMenorQueMil(resto);
+    }
+
+    // Eliminar el espacio final si existe
+    if (!resultado.empty() && resultado.back() == ' ') {
+        resultado.pop_back();
     }
 
     return resultado;
